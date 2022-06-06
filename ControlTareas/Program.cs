@@ -33,7 +33,7 @@ namespace ControlTareas
             Console.WriteLine("\n\n/----------Listado de tareas pendientes----------/");
             for (i = tareasPendientes.Count - 1; i >= 0; i--)
             {
-                Console.WriteLine($"Id de la tarea: {tareasPendientes[i].TareaID}");
+                Console.WriteLine($"\nId de la tarea: {tareasPendientes[i].TareaID}");
                 Console.WriteLine($"Descripcion de la tarea: {tareasPendientes[i].Descripcion}");
                 Console.WriteLine($"Duración de la tarea: {tareasPendientes[i].Duracion} minutos");
 
@@ -53,13 +53,67 @@ namespace ControlTareas
                 Console.WriteLine($"Descripcion de la tarea: {tareaPen.Descripcion}");
                 Console.WriteLine($"Duración de la tarea: {tareaPen.Duracion} minutos");
             }
+
+            int sumario = 0;
             Console.WriteLine("\n\n/----------Listado de tareas realizadas----------/");
             foreach (var tareaRea in tareasRealizadas)
             {
                 Console.WriteLine($"\nId de la tarea: {tareaRea.TareaID}");
                 Console.WriteLine($"Descripcion de la tarea: {tareaRea.Descripcion}");
                 Console.WriteLine($"Duración de la tarea: {tareaRea.Duracion} minutos");
+                sumario += tareaRea.Duracion;
             }
+
+            char buscar;
+            Console.WriteLine("\n/----------Desea buscar una tarea en específico?----------/");
+            Console.WriteLine("\"b\" para Sí, cualquier otro caracter para No");
+            buscar = Console.ReadKey().KeyChar;
+            while (buscar == 'b' || buscar == 'B')
+            {
+                Console.WriteLine("\nIngrese la descripción de la tarea:");
+                string descrip = Console.ReadLine();
+                Tarea tareaBuscada = null;
+                foreach (var item in tareasPendientes)
+                {
+                    if ((item.Descripcion.ToLower()).Contains(descrip.ToLower()))
+                    {
+                        tareaBuscada = item;
+                        break;
+                    }
+                }
+
+                if (tareaBuscada == null)
+                {
+                    foreach (var item in tareasRealizadas)
+                    {
+                        if ((item.Descripcion.ToLower()).Contains(descrip.ToLower()))
+                        {
+                            tareaBuscada = item;
+                            break;
+                        }
+                    }
+                }
+
+                if (tareaBuscada != null)
+                {
+                    Console.WriteLine($"\nTarea que contiene \"{descrip}\"");
+                    Console.WriteLine($"ID de tarea: {tareaBuscada.TareaID}");
+                    Console.WriteLine($"Descripción de tarea: {tareaBuscada.Descripcion}");
+                    Console.WriteLine($"Duración de tarea: {tareaBuscada.Duracion} minutos");
+                }
+                else
+                {
+                    Console.WriteLine("\nNo existe ninguna tarea con tal descripción");
+                }
+
+                Console.WriteLine("\nDesea buscar otra tarea?");
+                Console.WriteLine("\"b\" para Sí, cualquier otro caracter para No");
+                buscar = Console.ReadKey().KeyChar;
+            }
+
+            int horas = sumario / 60;
+            int min = sumario % 60;
+            Console.WriteLine($"\nEl empleado ha trabajado un total de {horas} horas y {min} minutos");
         }
     }
 }
